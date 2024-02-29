@@ -3,10 +3,10 @@
 VERSION="1.0.0"
 PNAME="server"
 
-# 如果有Dockerfile模板，则需要以下代码来初始化
-sed 's/__VERSION__/'${VERSION}'/' Dockerfile-tpl  > Dockerfile-tmp
-sed 's/__PNAME__/'${PNAME}'/' Dockerfile-tmp > Dockerfile
-rm -f Dockerfile-tmp
+## 如果有Dockerfile模板，则需要以下代码来初始化
+#sed 's/__VERSION__/'${VERSION}'/' Dockerfile-tpl  > Dockerfile-tmp
+#sed 's/__PNAME__/'${PNAME}'/' Dockerfile-tmp > Dockerfile
+#rm -f Dockerfile-tmp
 
 # 开始编译Docker镜像，如果有一些初始化操作亦可以放到这里
 
@@ -15,10 +15,10 @@ function check_version() {
     existVersion=$(docker images | awk '{if ($1 == "'$PNAME'") print $0}' | awk '{print $2}' |  grep $VERSION)
     if [ x"$existVersion" == x"$VERSION" ];then
         echo "bad version of build $PNAME-$VERSION"
-        # shellcheck disable=SC2242
         exit -1
     fi
 }
+
 if [ x"$1" != "test" ]; then
     check_version
 fi
@@ -34,7 +34,6 @@ docker build -t $PNAME .
 
 if [ $? != 0 ];then
     echo "failed to build $PNAME-${PNAME} image"
-    # shellcheck disable=SC2242
     exit -1
 fi
 
@@ -46,7 +45,6 @@ function clean() {
 	DOCKER_REPO_TMP=$1
 	if [ x$1 == x"" ]; then
 		echo "not found docker repo argument."
-                # shellcheck disable=SC2152
                 return -1
         fi
 	docker rmi ${DOCKER_REPO_TMP}/${PNAME}:latest
@@ -58,7 +56,6 @@ function tag() {
 	DOCKER_REPO_TMP=$1
 	if [ x$1 == x"" ]; then
 		echo "not found docker repo argument."
-                # shellcheck disable=SC2152
                 return -1
         fi
 	echo "docker tag ${DOCKER_REPO_TMP} latest..."
@@ -71,14 +68,12 @@ function push() {
 	DOCKER_REPO_TMP=$1
 	if [ x$1 == x"" ]; then
 		echo "not found docker repo argument."
-                # shellcheck disable=SC2152
                 return -1
         fi
 
 	TAG_TMP=$2
 	if [ x$2 == x"" ]; then
 		echo "not found docker tag argument."
-                # shellcheck disable=SC2152
                 return -1
         fi
 
@@ -99,7 +94,6 @@ function push() {
 
 	if ( $succ == 0 ); then
 		echo "failed to push docker images ${DOCKER_REPO_TMP}/${PNAME}:${TAG_TMP} at last..., exit now."
-		# shellcheck disable=SC2242
 		exit -1
 	fi
 }
@@ -112,7 +106,6 @@ echo "runing as region in $REGION.."
 tag $DOCKER_REPO
 if [ $? != 0 ];then
   echo "docker tag failed.."
-  # shellcheck disable=SC2242
   exit -1
 fi
 push $DOCKER_REPO latest
