@@ -19,7 +19,7 @@ function check_version() {
         exit -1
     fi
 }
-if [ x"$1" != "xtest" ]; then
+if [ x"$1" != "test" ]; then
     check_version
 fi
 
