@@ -11,17 +11,17 @@ PNAME="server"
 # 开始编译Docker镜像，如果有一些初始化操作亦可以放到这里
 
 #检查版本号是否存在
-function check_version() {
-    existVersion=$(docker images | awk '{if ($1 == "'$PNAME'") print $0}' | awk '{print $2}' |  grep $VERSION)
-    if [ x"$existVersion" == x"$VERSION" ];then
-        echo "bad version of build $PNAME-$VERSION"
-        exit -1
-    fi
-}
+#function check_version() {
+#    existVersion=$(docker images | awk '{if ($1 == "'$PNAME'") print $0}' | awk '{print $2}' |  grep $VERSION)
+#    if [ x"$existVersion" == x"$VERSION" ];then
+#        echo "bad version of build $PNAME-$VERSION"
+#        exit -1
+#    fi
+#}
 
-if [ x"$1" != "test" ]; then
-    check_version
-fi
+#if [ x"$1" != "test" ]; then
+#    check_version
+#fi
 
 ################################################################
 #  以下代码一般无需更改，如果想配置推送机房，则更新REGIONS即可 #
